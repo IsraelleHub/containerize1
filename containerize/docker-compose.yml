@@ -1,0 +1,26 @@
+version: "3"
+services:
+  app:
+    container_name: containerize_app_1
+    # your code goes here ...
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    expose:
+      - "8000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./app/src:/app/src
+    command: gunicorn -b 0.0.0.0:8000 server:app
+  nginx:
+    container_name: containerize_nginx_1
+    # your code goes here ...
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
