@@ -6,13 +6,8 @@ services:
     build:
       context: .
       dockerfile: app/Dockerfile
-    expose:
-      - "8000"
-    environment:
-      - FLASK_ENV=development
-    volumes:
-      - ./app/src:/app/src
-    command: gunicorn -b 0.0.0.0:8000 server:app
+    ports:
+      - "8000:8000"
   nginx:
     container_name: containerize_nginx_1
     # your code goes here ...
@@ -22,5 +17,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/files:/etc/nginx/certs
     depends_on:
       - app

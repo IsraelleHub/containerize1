@@ -1,22 +1,19 @@
 # your code goes here ...
-
-# Use an official Python runtime as a parent image
+# Use the base image with Python
 FROM python:3.9-slim
 
-# Set the working directory to /app
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy application files
+COPY ./app/src /app
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Install dependencies
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Make port 8000 available to the world outside this container
+# Expose the port the app runs on
 EXPOSE 8000
 
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
+# Start the application with gunicorn
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "server:app"]
